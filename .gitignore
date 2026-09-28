@@ -1,0 +1,21 @@
+# Source data — not redistributed. See README for how to obtain.
+data/source/
+
+# SAS artifacts
+*.log
+*.lst
+*.sas7bdat
+*.bak
+
+# R
+.Rproj.user/
+.Rhistory
+.RData
+
+# OS
+.DS_Store
+Thumbs.db
+~$*
+
+# Local working notes (Korean)
+STRUCTURE.md
