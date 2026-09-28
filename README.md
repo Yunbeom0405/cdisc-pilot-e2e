@@ -24,6 +24,8 @@ with dual-programming QC performed in **both SAS and R**.
 ## Approach
 
 <!-- TODO: write after Stage 1 -->
+Target standards: **SDTMIG v3.4**, Define-XML v2.1; aCRF follows SDTM-MSG v2.0.
+
 1. **Spec-first** — mapping specifications written before any programming,
    mirroring real-world workflow. Specs feed directly into define.xml generation.
 2. **Dual-programming QC** — independent re-implementation and `PROC COMPARE`.

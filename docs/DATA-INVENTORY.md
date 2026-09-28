@@ -17,7 +17,7 @@ Root: `data/source/cdisc-pilot/updated-pilot-submission-package/900172/m5/`
 
 | Layer | Available? | Location | Contents |
 |---|---|---|---|
-| Raw / CRF data | **No** | — | Only the blank CRF (`blankcrf.pdf`). Raw data will be generated with Python (Stage 1). |
+| Raw / CRF data | **No** | `sdtm/blankcrf.pdf` | Annotated CRF (SDTM annotations; named `blankcrf.pdf` per FDA eCTD convention). No raw data — generated with Python (Stage 1). |
 | SDTM | Yes | `datasets/cdiscpilot01/tabulations/sdtm/` | AE CM DM DS EX LB MH QS RELREC SC SE SV TA TE TI TS TV VS + SUPPAE SUPPDM SUPPDS SUPPLB |
 | ADaM | Yes | `datasets/cdiscpilot01/analysis/adam/datasets/` | ADSL ADAE ADLBC ADLBH ADLBHY ADQSADAS ADQSCIBC ADQSNPIX ADTTE ADVS |
 | ADaM programs | Partial | `datasets/cdiscpilot01/analysis/adam/programs/` | `adae.sas`, `at14-5-02.sas` only |
@@ -29,7 +29,8 @@ Datasets are SAS transport (`.xpt`); a Dataset-JSON (`.json`) copy sits alongsid
 
 ## Reference answer key (kept outside this repo)
 
-PHUSE TestDataFactory `Updated/` (modern SDTM IG 3.2 / ADaM IG 1.1 rebuild of the same study)
+PHUSE TestDataFactory `Updated/` (modern SDTM IG 3.2 / ADaM IG 1.1 rebuild of the same study;
+this project itself targets SDTMIG v3.4, so version-driven differences are expected)
 is stored separately and is **not opened until the matching stage is finished**. It contains the
 SDTM/ADaM specs (`SpecSDTM_define20.xlsx`, `SpecADaM_define20.xlsx`) and Pinnacle 21 reports,
 which would otherwise give away the answers.
