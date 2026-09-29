@@ -43,7 +43,7 @@ Target standards: **SDTMIG v3.4**, Define-XML v2.1; aCRF follows SDTM-MSG v2.0.
 | SAS | SDTM / ADaM / TLF programming |
 | Pinnacle 21 Community | Validation, spec generation, define.xml (v2.1) |
 | R + `{sdtm.oak}`, `{admiral}`, `{diffdf}` | Cross-language QC |
-| Python (`faker`, `pandas`, `openpyxl`) | Simulated raw EDC data (the Pilot ships SDTM/ADaM only) |
+| Python (`faker`, `pandas`, `openpyxl`, `pyreadstat`) | Simulated raw EDC data (the Pilot ships SDTM/ADaM only); trial design domains |
 
 ## How to reproduce
 
@@ -54,6 +54,21 @@ git clone --depth 1 https://github.com/cdisc-org/sdtm-adam-pilot-project.git dat
 ```
 
 See [docs/DATA-INVENTORY.md](docs/DATA-INVENTORY.md) for what the package contains.
+
+Regenerate the simulated raw EDC/IxRS layer (`raw/`) — see [docs/RAW-GEN-NOTES.md](docs/RAW-GEN-NOTES.md):
+
+```bash
+python python/generate_raw.py
+```
+
+Trial design domains (TA, TE, TV, TI, TS) are adapted from the PHUSE Test Data Factory
+SDTMIG 3.2 datasets to SDTMIG 3.4 (changes listed in the script header). Copy
+`ta/te/tv/ti/ts.xpt` from [phuse-org/phuse-scripts](https://github.com/phuse-org/phuse-scripts)
+`data/sdtm/TDF_SDTM_v1.0/` (MIT license) to `data/source/tdf/`, then:
+
+```bash
+python python/trial_design.py
+```
 
 <!-- TODO: add run order -->
 
