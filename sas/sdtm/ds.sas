@@ -115,12 +115,15 @@ data ds1;
   if dscat = 'PROTOCOL MILESTONE' then epoch = 'SCREENING';
   else %epoch(dsstdtc)
   %dy(dsstdtc, dsstdy)
-  _dsdt = substr(dsstdtc, 1, 10);
+  /* fixed record order (MT.DSSEQ) */
+  if dsdecod = 'INFORMED CONSENT OBTAINED' then _ord = 1;
+  else if dsdecod = 'RANDOMIZED' then _ord = 2;
+  else if dsscat = 'STUDY TREATMENT' then _ord = 3;
+  else if dsscat = 'STUDY PARTICIPATION' then _ord = 4;
 run;
 
-/* same day: milestones first, then treatment before participation */
 proc sort data=ds1;
-  by usubjid _dsdt descending dscat descending dsscat;
+  by usubjid _ord;
 run;
 
 data ds2;
@@ -148,7 +151,7 @@ run;
 %finalize(ds2, ds, Disposition,
   vars=STUDYID DOMAIN USUBJID DSSEQ DSTERM DSDECOD DSCAT DSSCAT VISITNUM VISIT
     EPOCH DSSTDTC DSSTDY,
-  keys=STUDYID USUBJID DSCAT DSSCAT DSDECOD DSSTDTC)
+  keys=STUDYID USUBJID DSSEQ)
 
 /* SUPPDS */
 data suppds0;
