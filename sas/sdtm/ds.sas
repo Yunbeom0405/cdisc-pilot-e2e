@@ -27,22 +27,6 @@ proc format;
     '22' = 'PHYSICIAN DECISION'
     '14', '243' = 'PROTOCOL DEVIATION'
     '18' = 'STUDY TERMINATED BY SPONSOR';
-
-  value visit
-    1 = 'SCREENING 1'
-    2 = 'SCREENING 2'
-    3 = 'BASELINE'
-    4 = 'WEEK 2'
-    5 = 'WEEK 4'
-    6 = 'AMBUL ECG REMOVAL'
-    7 = 'WEEK 6'
-    8 = 'WEEK 8'
-    9 = 'WEEK 12'
-    10 = 'WEEK 16'
-    11 = 'WEEK 20'
-    12 = 'WEEK 24'
-    13 = 'WEEK 26'
-    201 = 'RETRIEVAL';
 run;
 
 proc sql;
@@ -115,7 +99,7 @@ data ds1;
   if dscat = 'PROTOCOL MILESTONE' then epoch = 'SCREENING';
   else %epoch(dsstdtc)
   %dy(dsstdtc, dsstdy)
-  /* fixed record order (MT.DSSEQ) */
+  /* fixed record order */
   if dsdecod = 'INFORMED CONSENT OBTAINED' then _ord = 1;
   else if dsdecod = 'RANDOMIZED' then _ord = 2;
   else if dsscat = 'STUDY TREATMENT' then _ord = 3;

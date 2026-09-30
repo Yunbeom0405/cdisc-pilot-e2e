@@ -7,7 +7,6 @@ proc sql;
   create table ex_subj as
   select subject,
     max(case when folder = 'V3' then visit_date else '' end) as v3_date,
-    max(last_dose_date) as last_dose,
     max(patch25_per_day = '1') as any25
   from raw_ex_dosage
   group by subject;
@@ -24,11 +23,12 @@ run;
 proc sql;
   create table dm0 as
   select d.*, i.subject_status, i.treatment_arm, i.screen_fail_datetime,
-    e.v3_date, e.last_dose, e.any25, (e.subject is not missing) as has_ex,
+    e.v3_date, f.final_dose_date as last_dose, e.any25, (e.subject is not missing) as has_ex,
     s.visit_date as ds_date, s.death_date, c.last_contact
   from raw_dm as d
   left join raw_irt_randomization as i on d.subject = catx('-', i.site_id, i.subject_id)
   left join ex_subj as e on d.subject = e.subject
+  left join raw_final_dose as f on d.subject = f.subject
   left join raw_ds_summary as s on d.subject = s.subject
   left join (select subject, max(cdate) as last_contact from contact group by subject) as c
     on d.subject = c.subject;
