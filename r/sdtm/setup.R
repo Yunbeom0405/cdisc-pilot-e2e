@@ -8,6 +8,7 @@ suppressPackageStartupMessages({
   library(readr)
   library(readxl)
   library(stringr)
+  library(tidyr)
   library(haven)
 })
 
@@ -35,14 +36,14 @@ iso <- function(x) {
   as.character(create_iso8601(x, .format = "dd mmm y", .na = c("UN", "UNK")))
 }
 
-# study day, complete dates only (MT.DY)
+# study day, complete dates only
 study_day <- function(dtc, ref) {
   ok <- !is.na(dtc) & !is.na(ref) & nchar(dtc) >= 10 & nchar(ref) >= 10
   dy <- as.integer(as.Date(substr(dtc, 1, 10)) - as.Date(substr(ref, 1, 10)))
   if_else(ok, dy + (dy >= 0), NA_integer_)
 }
 
-# temporary rule until SE is available (MT.EPOCH)
+# temporary rule until SE is available
 epoch <- function(dtc, rfxst, rfxen) {
   d <- substr(dtc, 1, 10)
   case_when(
@@ -51,6 +52,42 @@ epoch <- function(dtc, rfxst, rfxen) {
     is.na(rfxen) | d <= rfxen ~ "TREATMENT",
     TRUE ~ "FOLLOW-UP"
   )
+}
+
+# planned visits, built by python/trial_design.py
+tv <- read_xpt("data/derived/sdtm/tv.xpt") |> select(VISITNUM, VISIT, VISITDY)
+
+# visit lookup written by sv.R
+read_svmap <- function() readRDS(file.path(out_dir, "svmap.rds"))
+
+# add visit (SV) and reference dates (DM) to raw findings
+with_visit <- function(dat) {
+  dm <- read_sdtm("dm") |> select(USUBJID, RFSTDTC, RFXSTDTC, RFXENDTC)
+  dat |>
+    left_join(read_svmap(), by = c("SUBJECT", "FOLDER", "VISIT_DATE")) |>
+    left_join(dm, by = "USUBJID")
+}
+
+# pre-dose: before the first dose, or first-dose date at the dosing visit
+predose <- function(dtc, rfxst, visitnum) {
+  d <- substr(dtc, 1, 10)
+  coalesce(nchar(dtc) >= 10 & !is.na(rfxst) & (d < rfxst | (d == rfxst & visitnum == 3)), FALSE)
+}
+
+# pre-dose records are SCREENING, also on the first-dose date
+finding_epoch <- function(dtc, rfxst, rfxen, pre) {
+  if_else(pre, "SCREENING", epoch(dtc, rfxst, rfxen))
+}
+
+# flag the last pre-dose record with a result, per subject and `by`
+lobxfl <- function(dat, by, res, dtc) {
+  last <- dat |>
+    filter(pre, !is.na(.data[[res]])) |>
+    arrange(.data[[dtc]], VISITNUM) |>
+    group_by(across(all_of(c("USUBJID", by)))) |>
+    slice_tail(n = 1) |>
+    pull(row)
+  if_else(dat$row %in% last, "Y", NA_character_)
 }
 
 # keep/order variables and labels from the spec, check keys, write xpt

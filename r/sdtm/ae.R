@@ -6,7 +6,7 @@ source("r/sdtm/setup.R")
 
 dm <- read_sdtm("dm")
 
-# drop exact duplicate rows (P1), blank onset = pre-existing condition -> MH
+# drop exact duplicate rows, blank onset = pre-existing condition -> MH
 ae_raw <- read_raw("ae") |>
   distinct() |>
   filter(!is.na(ONSET_DATE)) |>
@@ -35,7 +35,7 @@ ae0 <-
     raw_fmt = "dd mmm y") %>%
   mutate(across(c(AEDTC, AESTDTC, AEENDTC), as.character))
 
-# seriousness criteria: CRF code listed in SERIOUS_CODES -> 'Y', else 'N' (MT.AESFLAG)
+# seriousness criteria: CRF code listed in SERIOUS_CODES -> 'Y', else 'N'
 sflag <- c(AESDTH = 1, AESLIFE = 2, AESDISAB = 3, AESHOSP = 4,
   AESCONG = 5, AESCAN = 6, AESOD = 7, AESMIE = 8)
 for (v in names(sflag)) {

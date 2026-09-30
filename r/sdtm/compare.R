@@ -10,7 +10,13 @@ keys <- list(
   ae     = c("USUBJID", "AESEQ"),
   ds     = c("USUBJID", "DSSEQ"),
   suppds = c("USUBJID", "IDVARVAL", "QNAM"),
-  relrec = c("USUBJID", "RDOMAIN", "IDVARVAL")
+  relrec = c("USUBJID", "RDOMAIN", "IDVARVAL"),
+  sv     = c("USUBJID", "VISIT"),
+  ex     = c("USUBJID", "EXSEQ"),
+  mh     = c("USUBJID", "MHSEQ"),
+  vs     = c("USUBJID", "VSSEQ"),
+  qs     = c("USUBJID", "QSSEQ"),
+  lb     = c("USUBJID", "LBSEQ")
 )
 
 report <- "output/validation/sdtm-r-vs-sas.txt"
@@ -18,7 +24,12 @@ dir.create(dirname(report), showWarnings = FALSE, recursive = TRUE)
 if (file.exists(report)) file.remove(report)
 
 for (d in names(keys)) {
-  sas <- read_xpt(file.path("data/derived/sdtm", paste0(d, ".xpt")))
+  sas_file <- file.path("data/derived/sdtm", paste0(d, ".xpt"))
+  if (!file.exists(sas_file)) {
+    message(d, ": no SAS file, skipped")
+    next
+  }
+  sas <- read_xpt(sas_file)
   r   <- read_xpt(file.path("data/derived/sdtm-r", paste0(d, ".xpt")))
   cat("\n=====", toupper(d), "=====\n", file = report, append = TRUE)
   res <- diffdf(sas, r, keys = keys[[d]], suppress_warnings = TRUE)

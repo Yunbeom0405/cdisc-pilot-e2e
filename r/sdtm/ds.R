@@ -105,7 +105,7 @@ ds <- bind_rows(
     EPOCH = if_else(DSCAT == "PROTOCOL MILESTONE", "SCREENING",
       epoch(DSSTDTC, RFXSTDTC, RFXENDTC)),
     DSSTDY = study_day(DSSTDTC, RFSTDTC),
-    # fixed record order (MT.DSSEQ)
+    # fixed record order
     ds_ord = case_when(
       DSDECOD == "INFORMED CONSENT OBTAINED" ~ 1L,
       DSDECOD == "RANDOMIZED" ~ 2L,
