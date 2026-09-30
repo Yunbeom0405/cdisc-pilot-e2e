@@ -22,3 +22,7 @@ STRUCTURE.md
 
 # Working SDTM spec (kept local)
 specs/sdtm-spec.xlsx
+data/derived/sdtm-r/svmap.rds
+
+data/derived/sdtm-r/*.xpt
+"SDTM Terminology.xls"

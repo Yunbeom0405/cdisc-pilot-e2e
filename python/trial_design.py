@@ -11,6 +11,10 @@ no structural change between 3.2 and 3.4 and pass through as-is. TS changes:
 - TTYPE TSSEQ renumbered 1-3 (source skipped 3).
 - PCLAS value left blank: the source class (NDF-RT, retired) does not fit xanomeline.
 
+TV changes (study VISITNUM scheme): telephone visits 8.1-11.1 -> 8.5-11.5 so that
+unscheduled visits can take previous visit + .1; 501 is the CRF's Adverse Event Follow-up
+visit (source label 'Rash followup'), so the unused 101 AE FOLLOW-UP row is dropped.
+
 Source files (MIT license): github.com/phuse-org/phuse-scripts, data/sdtm/TDF_SDTM_v1.0.
 Place ta/te/tv/ti/ts.xpt in data/source/tdf/.
 
@@ -88,12 +92,22 @@ def build_ts(ts):
     return pd.concat([ts, new], ignore_index=True).fillna("")
 
 
+def build_tv(tv):
+    tv = tv[tv.VISITNUM != 101].copy()
+    tel = tv.VISIT.str.endswith("(T)")
+    tv.loc[tel, "VISITNUM"] = tv.loc[tel, "VISITNUM"].round() + 0.5
+    tv.loc[tv.VISITNUM == 501, "VISIT"] = "AE FOLLOW-UP"
+    return tv
+
+
 def main():
     OUT.mkdir(parents=True, exist_ok=True)
     for name in ["ta", "te", "tv", "ti", "ts"]:
         df, meta = read(name)
         if name == "ts":
             df = build_ts(df)
+        if name == "tv":
+            df = build_tv(df)
         write(df, meta, name)
         print(f"{name}: {len(df)} records")
 
