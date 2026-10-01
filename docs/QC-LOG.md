@@ -140,6 +140,34 @@ The R programs follow the spec and the raw data, and were written after the SAS 
 | SV | 3559 | Match |
 | EX | 591 | Match |
 | MH | 1818 | Match |
+| SC | 306 | Match (added 2026-10-01) |
 | VS | 29648 | Match |
 | QS | 13525 | Match |
 | LB | 59580 | Match |
+
+---
+
+## 1-8 ADaM: results checked against the CSR
+
+| | |
+|---|---|
+| Date | 2026-10-01 |
+| Production | `sas/adam/*.sas` -> `data/derived/adam/` |
+| Method | Record and flag counts checked against an independent Python calculation; key results checked against the CSR tables |
+
+| CSR table | CSR | ADaM |
+|---|---|---|
+| 14-3.01 ADAS-Cog (11) Week 24 LOCF: n | 79 / 81 / 74 | 79 / 81 / 74 |
+| 14-3.01 Baseline mean | 24.1 / 24.4 / 21.3 | 24.1 / 24.4 / 21.3 |
+| 14-3.01 Change from baseline mean | 2.5 / 2.0 / 1.5 | 2.5 / 2.0 / 1.5 |
+| 14-3.02 CIBIC+ Week 24 mean | 4.3 / 4.2 / 4.3 | 4.3 / 4.2 / 4.3 |
+| 14-5.01 Subjects with TEAE [events] | 65 [281] / 77 [412] / 76 [433] | 65 [281] / 77 [411] / 76 [433] |
+
+The one TEAE event less in the low dose group is the duplicate AE row planted in the raw data (P1, 01-701-1115), removed in SDTM.
+
+### Finding 1 - ACTARM for subjects who stopped during titration (Interpretation)
+
+- **What:** Safety population by actual treatment was 86 / 96 / 72. The CSR has 86 / 84 / 84.
+- **Why:** The SDTM DM rule set ACTARM = Xanomeline Low Dose for 12 high-dose subjects who never received the 81 mg dose. The high-dose arm starts with 2 weeks of 54 mg (titration, see TA), and these subjects stopped within those 2 weeks. They followed the high-dose arm path, so their actual arm is High Dose.
+- **Fix:** ACTARM = ARM for every treated subject (`dm.sas`, `dm.R`, spec `MT.ACTARM`, SDTM Open Issue). DM and all ADaM datasets rerun.
+- **Lesson:** Actual arm follows the arm path in the trial design, not the dose received at one point. Checking derived counts against the CSR found an error that SAS vs R double programming could not, because both programs used the same rule.
