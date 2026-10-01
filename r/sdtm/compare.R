@@ -14,6 +14,7 @@ keys <- list(
   sv     = c("USUBJID", "VISIT"),
   ex     = c("USUBJID", "EXSEQ"),
   mh     = c("USUBJID", "MHSEQ"),
+  sc     = c("USUBJID", "SCSEQ"),
   vs     = c("USUBJID", "VSSEQ"),
   qs     = c("USUBJID", "QSSEQ"),
   lb     = c("USUBJID", "LBSEQ")

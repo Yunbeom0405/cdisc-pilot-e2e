@@ -6,8 +6,7 @@ Purpose : Create SDTM DM
 proc sql;
   create table ex_subj as
   select subject,
-    max(case when folder = 'V3' then visit_date else '' end) as v3_date,
-    max(patch25_per_day = '1') as any25
+    max(case when folder = 'V3' then visit_date else '' end) as v3_date
   from raw_ex_dosage
   group by subject;
 quit;
@@ -23,7 +22,7 @@ run;
 proc sql;
   create table dm0 as
   select d.*, i.subject_status, i.treatment_arm, i.screen_fail_datetime,
-    e.v3_date, f.final_dose_date as last_dose, e.any25, (e.subject is not missing) as has_ex,
+    e.v3_date, f.final_dose_date as last_dose, (e.subject is not missing) as has_ex,
     s.visit_date as ds_date, s.death_date, c.last_contact
   from raw_dm as d
   left join raw_irt_randomization as i on d.subject = catx('-', i.site_id, i.subject_id)
@@ -86,11 +85,6 @@ data dm1;
     if has_ex then do;
       actarmcd = armcd;
       actarm = arm;
-      /* high dose subjects never given the 25 cm2 patch got low dose only */
-      if armcd = 'Xan_Hi' and not any25 then do;
-        actarmcd = 'Xan_Lo';
-        actarm = 'Xanomeline Low Dose';
-      end;
     end;
     else armnrs = 'ASSIGNED, NOT TREATED';
   end;

@@ -16,7 +16,7 @@ ex_subj <- ex |>
   group_by(SUBJECT) |>
   summarise(
     RFXSTDTC = iso(first(VISIT_DATE[FOLDER == "V3"])),
-    any25 = any(PATCH25_PER_DAY == "1")
+    has_ex = TRUE
   )
 
 # RFPENDTC: latest contact date
@@ -81,15 +81,11 @@ dm <- dm0 |>
     screen_fail = SUBJECT_STATUS == "Screen Failed",
     ARM = if_else(screen_fail, NA_character_, TREATMENT_ARM),
     ARMCD = ct_map(ARM, ct_spec = ct_spec, ct_clst = "ARMCD"),
-    ACTARM = case_when(
-      is.na(any25) ~ NA_character_,
-      ARMCD == "Xan_Hi" & !any25 ~ "Xanomeline Low Dose",
-      TRUE ~ ARM
-    ),
+    ACTARM = if_else(is.na(has_ex), NA_character_, ARM),
     ACTARMCD = ct_map(ACTARM, ct_spec = ct_spec, ct_clst = "ARMCD"),
     ARMNRS = case_when(
       screen_fail ~ "SCREEN FAILURE",
-      is.na(any25) ~ "ASSIGNED, NOT TREATED"
+      is.na(has_ex) ~ "ASSIGNED, NOT TREATED"
     ),
 
     DMDY = study_day(DMDTC, RFSTDTC)
