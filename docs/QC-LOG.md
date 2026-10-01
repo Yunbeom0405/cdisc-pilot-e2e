@@ -217,5 +217,5 @@ The one TEAE event less in the low dose group is the duplicate AE row planted in
 | ADLBH | 21919 | Match |
 | ADLBHY | 5294 | Match |
 | ADTTE | 508 | Match |
-| ADQSADAS | 9943 | Match except STUDYID (Finding 1); SAS rerun pending |
+| ADQSADAS | 9943 | Match (after Finding 1 fix) |
 | ADQSCIBC | 726 | Match |
