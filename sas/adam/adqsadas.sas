@@ -49,7 +49,8 @@ proc sql;
 quit;
 
 data qs1;
-  set total(in=_t) items(where=(qsstresn ne .));
+  /* STUDYID comes from ADSL for all records */
+  set total(in=_t) items(where=(qsstresn ne .) drop=studyid);
   length paramcd param $200;
   if _t then do;
     paramcd = 'ACTOT';

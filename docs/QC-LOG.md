@@ -171,3 +171,51 @@ The one TEAE event less in the low dose group is the duplicate AE row planted in
 - **Why:** The SDTM DM rule set ACTARM = Xanomeline Low Dose for 12 high-dose subjects who never received the 81 mg dose. The high-dose arm starts with 2 weeks of 54 mg (titration, see TA), and these subjects stopped within those 2 weeks. They followed the high-dose arm path, so their actual arm is High Dose.
 - **Fix:** ACTARM = ARM for every treated subject (`dm.sas`, `dm.R`, spec `MT.ACTARM`, SDTM Open Issue). DM and all ADaM datasets rerun.
 - **Lesson:** Actual arm follows the arm path in the trial design, not the dose received at one point. Checking derived counts against the CSR found an error that SAS vs R double programming could not, because both programs used the same rule.
+
+---
+
+## 1-9 ADaM: SAS vs R cross-language comparison
+
+| | |
+|---|---|
+| Date | 2026-10-01 |
+| Production | `sas/adam/*.sas` -> `data/derived/adam/` |
+| Independent | `r/adam/*.R` ({admiral} 1.5.0) -> `data/derived/adam-r/` |
+| Method | `r/adam/compare.R` - {diffdf} by key, report in `output/validation/adam-r-vs-sas.txt` |
+
+### First run
+
+| Dataset | Result |
+|---|---|
+| ADSL | Values match; date variables had format `DATE` in R and `DATE9.` in SAS |
+| ADAE, ADMH, ADVS, ADLBC, ADLBH, ADLBHY, ADTTE, ADQSCIBC | Match |
+| ADQSADAS | STUDYID blank in SAS for 726 of 980 ACTOT records |
+
+### Finding 1 - STUDYID lost in a one-to-many merge (Bug in SAS)
+
+- **What:** In the SAS ADQSADAS, STUDYID was blank on 726 total-score (ACTOT) records. Only the first ACTOT record of each subject had a value.
+- **Why:** The total-score records are built without STUDYID; the item records still had it from QS. Stacked together, the ACTOT rows had a blank STUDYID. `%addadsl` then merged ADSL (which also has STUDYID) one-to-many by USUBJID. In a SAS merge, the ADSL value is read only once per subject; on the next records the blank value from the analysis data overwrites it. R joins by key and takes STUDYID from ADSL on every row, so R was right.
+- **Fix:** `adqsadas.sas` drops STUDYID from the item records before the merge, so every record gets it from ADSL.
+- **Lesson:** In a one-to-many SAS merge, a variable that exists in both datasets keeps the value of the "many" side after the first record. Drop overlapping variables before merging.
+
+### Finding 2 - ties in the first dermatologic event (Language)
+
+- **What:** No difference in the output, but {admiral} warned that ADAE has several records with the same USUBJID and ASTDT. 90 subjects have more than one dermatologic event on the date of their first one.
+- **Why:** `derive_param_tte()` picks one record per subject by date only. With ties, which AESEQ goes into SRCSEQ is not guaranteed. SAS sorts by ASTDT and AESEQ, so it always takes the lowest AESEQ. The R result matched by chance.
+- **Fix:** `adtte.R` keeps only the first event per subject (ASTDT, then AESEQ) before `derive_param_tte()`.
+- **Lesson:** A match today is not proof; a warning about ties means the result can change. Make every "first record" rule fully ordered.
+
+### Final result
+
+| Dataset | Rows | Result |
+|---|---|---|
+| ADSL | 306 | Match |
+| ADAE | 1190 | Match |
+| ADMH | 1818 | Match |
+| ADVS | 29634 | Match |
+| ADLBC | 32734 | Match |
+| ADLBH | 21919 | Match |
+| ADLBHY | 5294 | Match |
+| ADTTE | 508 | Match |
+| ADQSADAS | 9943 | Match except STUDYID (Finding 1); SAS rerun pending |
+| ADQSCIBC | 726 | Match |

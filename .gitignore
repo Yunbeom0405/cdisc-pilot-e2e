@@ -27,3 +27,4 @@ data/derived/sdtm-r/svmap.rds
 
 data/derived/sdtm-r/*.xpt
 "SDTM Terminology.xls"
+data/derived/adam-r/*.xpt

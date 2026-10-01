@@ -1,0 +1,76 @@
+
+===== ADSL =====
+No issues found
+
+
+===== ADAE =====
+No issues found
+
+
+===== ADMH =====
+No issues found
+
+
+===== ADVS =====
+No issues found
+
+
+===== ADLBC =====
+No issues found
+
+
+===== ADLBH =====
+No issues found
+
+
+===== ADLBHY =====
+No issues found
+
+
+===== ADTTE =====
+No issues found
+
+
+===== ADQSADAS =====
+Differences found between the objects!
+
+Summary of BASE and COMPARE
+  ==================================================================
+    PROPERTY             BASE                       COMP            
+  ------------------------------------------------------------------
+      Name                sas                         r             
+     Class     "tbl_df, tbl, data.frame"  "tbl_df, tbl, data.frame" 
+    Rows(#)              9943                       9943            
+   Columns(#)             39                         39             
+  ------------------------------------------------------------------
+
+
+Not all Values Compared Equal
+  =============================
+   Variable  No of Differences 
+  -----------------------------
+   STUDYID          726        
+  -----------------------------
+
+
+First 10 of 726 rows are shown in table below
+  ================================================================================
+   VARIABLE    USUBJID    PARAMCD  AVISITN     ADT      DTYPE  BASE    COMPARE    
+  --------------------------------------------------------------------------------
+   STUDYID   01-701-1015   ACTOT      8     2014-03-05               CDISCPILOT01 
+   STUDYID   01-701-1015   ACTOT     16     2014-05-07               CDISCPILOT01 
+   STUDYID   01-701-1015   ACTOT     24     2014-06-18               CDISCPILOT01 
+   STUDYID   01-701-1023   ACTOT      8     2012-09-02               CDISCPILOT01 
+   STUDYID   01-701-1023   ACTOT     16     2012-09-02  LOCF         CDISCPILOT01 
+   STUDYID   01-701-1023   ACTOT     24     2013-02-18               CDISCPILOT01 
+   STUDYID   01-701-1028   ACTOT      8     2013-09-10               CDISCPILOT01 
+   STUDYID   01-701-1028   ACTOT     16     2013-11-06               CDISCPILOT01 
+   STUDYID   01-701-1028   ACTOT     24     2014-01-06               CDISCPILOT01 
+   STUDYID   01-701-1033   ACTOT      8     2014-04-14               CDISCPILOT01 
+  --------------------------------------------------------------------------------
+
+
+
+===== ADQSCIBC =====
+No issues found
+
