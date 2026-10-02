@@ -35,7 +35,7 @@ Target standards: SDTMIG v3.4, ADaM-IG 1.3, Define-XML v2.1. The aCRF follows SD
 |---|---|---|---|
 | SDTM | 12 domains, plus TA/TE/TV/TI/TS | Match | 0 errors, 55,033 warnings |
 | ADaM | ADSL, ADAE, ADMH, ADVS, ADLBC, ADLBH, ADLBHY, ADQSADAS, ADQSCIBC, ADTTE | Match | 0 errors, 1,536 warnings |
-| TLF | Tables 14-1.01, 14-2.01, 14-3.01, 14-5.01 and Figure 14-1 | Match, key results equal CSR | — |
+| TLF | Tables 14-1.01, 14-2.01, 14-3.01, 14-5.01, A3 (AEs by max severity), 23 (lab shifts), Figures 14-1 and A8 (eDISH) | Match; key results of the first four equal CSR | — |
 | define.xml | SDTM and ADaM, Define-XML 2.1 | — | Validated with the data |
 
 - Every remaining P21 warning has a documented decision: [docs/P21-REVIEW.md](docs/P21-REVIEW.md).

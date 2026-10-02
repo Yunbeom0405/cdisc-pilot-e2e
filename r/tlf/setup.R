@@ -56,7 +56,9 @@ save_df <- function(df, name, title, heads, foot = character(), src = name) {
   write_csv(select(df, -INDENT), file.path(out_dir, paste0(name, ".csv")), na = "")
   body <- select(df, starts_with("C"))
   rows <- lapply(seq_len(nrow(df)), \(i) {
-    rrowl(df$LABEL[i], as.list(unlist(body[i, ])), format = "xx", indent = df$INDENT[i])
+    r <- rrowl(df$LABEL[i], as.list(unlist(body[i, ])), format = "xx", indent = df$INDENT[i])
+    obj_name(r) <- as.character(df$ROW[i])
+    r
   })
   tbl <- rtable(header = heads, .lst = rows)
   main_title(tbl) <- title

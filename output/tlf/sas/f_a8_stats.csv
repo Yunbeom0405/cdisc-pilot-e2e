@@ -1,0 +1,5 @@
+LABEL,C1,C2,C3,ROW
+N (ALT and bilirubin measured),84,81,80,1
+ALT >= 3 x ULN,2 (2.4%),0,1 (1.3%),2
+Bilirubin >= 2 x ULN,1 (1.2%),0,1 (1.3%),3
+ALT >= 3 x ULN and bilirubin >= 2 x ULN,1 (1.2%),0,0,4

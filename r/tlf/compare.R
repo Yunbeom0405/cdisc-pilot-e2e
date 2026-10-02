@@ -5,7 +5,7 @@
 library(readr)
 library(diffdf)
 
-tlfs <- c("t_14_1_01", "t_14_2_01", "t_14_3_01", "t_14_5_01", "f_14_1_stats")
+tlfs <- c("t_14_1_01", "t_14_2_01", "t_14_3_01", "t_14_5_01", "t_a3", "t_lb_shift", "f_14_1_stats", "f_a8_stats")
 
 report <- "output/validation/tlf-r-vs-sas.txt"
 if (file.exists(report)) file.remove(report)

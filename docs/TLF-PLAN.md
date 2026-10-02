@@ -32,6 +32,8 @@ they follow current practice (FDA Standard Safety Tables and Figures, 2022) and 
 
 Not produced: table 16 (NPI-X) and table 29 (concomitant medications). NPI-X and CM raw data were not generated in this project.
 
+Built so far: tables 1, 3, 5, 18 and figure F1 (SAP), plus A3, the chemistry part of tables 23/24 (`t_lb_shift`) and A8 (`f_a8`).
+
 ## Additional displays
 
 | # | Title | Population | ADaM | Why |
