@@ -37,12 +37,16 @@ SAS is the production program, R the independent QC program written from the spe
 | 11 | 1-11 | Formatted strata used as column names | Bug | SAS | SAS log (run error) |
 | 12 | 1-11 | Kaplan-Meier columns swapped (stratum order) | Bug | SAS | SAS vs R comparison |
 | 13 | 1-11 | WHERE= on a renamed variable dropped the ANCOVA rows | Bug | SAS | SAS vs R comparison |
+| 14 | 1-13 | `_SAME_` used in a `value` format, LB came out empty | Bug | SAS | SAS log (run error) |
+| 15 | 1-13 | Lower limit 5.4E-79 instead of 0, R2A1LO = Inf | Bug | Raw data | P21 (AD0133C) |
+| 16 | 1-13 | ADURU `DAY`, CT value is `DAYS` | Bug | Both | P21 with define.xml (CT2002) |
 
 | Found by | Findings |
 |---|---|
 | SAS vs R comparison | 8 (1, 2, 5, 6, 8, 10, 12, 13) |
 | Check against the CSR | 1 (7) |
-| Logs, warnings, code review | 4 (3, 4, 9, 11) |
+| Logs, warnings, code review | 5 (3, 4, 9, 11, 14) |
+| P21 | 2 (15, 16) |
 
 Four SAS bugs (8, 10, 12, 13) gave no error or warning and were only visible in the comparison. Finding 7 was in the spec, so both programs agreed; only the CSR check found it.
 
@@ -252,7 +256,7 @@ The one TEAE event less in the low dose group is the duplicate AE row planted in
 | ADAE | 1190 | Match |
 | ADMH | 1818 | Match |
 | ADVS | 29634 | Match |
-| ADLBC | 32734 | Match |
+| ADLBC | 32734 | Match (ADLB is split into ADLBC/ADLBH as in the CDISC Pilot; a single ADLB is also valid per ADaM IG) |
 | ADLBH | 21919 | Match |
 | ADLBHY | 5294 | Match |
 | ADTTE | 508 | Match |
@@ -316,3 +320,27 @@ The R results were first checked against the CSR: Table 14-3.01 (ANCOVA dose-res
 | 14-3.01 ADAS-Cog Week 24 | 19 | Match |
 | 14-5.01 TEAE | 254 | Match (after Finding 1) |
 | Figure 14-1 statistics | 10 | Match (after Finding 3) |
+
+---
+
+## 1-13 SDTM: P21 fixes
+
+P21 found lab-only unscheduled visits missing from SV and non-CT standard units in LB. Both were fixed in `sv.sas`/`sv.R` and `lb.sas`/`lb.R`.
+
+### Finding 14 - `_SAME_` in a value format (Bug in SAS)
+
+`other = _same_` is valid only in an `invalue`. In `proc format; value $stresu` it is a syntax error, so the format was not created and the LB step produced 0 rows. SDTM.LB was not replaced, so the old data set was exported again without the new unit fix. Fixed with `other = [$20.]`. Found in the SAS log; the R version was unaffected.
+
+### Finding 15 - Zero stored as 5.4E-79 (Bug in raw data)
+
+The Pilot writes a lower limit of 0 as 5.39761E-79 for BASO and EOS. It was copied into `raw/lab_results.csv`, so ADLBH had R2A1LO = Inf for 3,566 records. SAS and R both carried it through, so the comparison could not see it; P21 did (AD0133C, 3,616). Fixed in `python/generate_raw.py`, CSV regenerated, SDTM LB and ADaM ADLBC/ADLBH rerun.
+
+### Finding 16 - ADURU not a CT value (Bug in both programs)
+
+`ADURU` was `DAY`; the Unit codelist submission value is `DAYS`. SAS and R agreed, so the comparison could not see it. P21 flagged it once define.xml was checked against the data (717 records). Fixed in `adae.sas` and `adae.R`, ADAE rerun.
+
+The same run found only spec gaps (unit terms, trial design domains, data types, one codelist link), fixed in the specs. See `docs/P21-REVIEW.md`.
+
+### Result
+
+SDTM 12 domains and ADaM 10 datasets match again (SAS vs R). P21 SDTM warnings went from 69,554 to 55,033 (SD0065 gone); ADaM 5,152 to 1,536. define.xml built and checked against the data. See `docs/P21-REVIEW.md`.

@@ -26,5 +26,8 @@ specs/adam-spec.xlsx
 data/derived/sdtm-r/svmap.rds
 
 data/derived/sdtm-r/*.xpt
-"SDTM Terminology.xls"
+SDTM Terminology.xls
 data/derived/adam-r/*.xpt
+
+# Python
+__pycache__/
