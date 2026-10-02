@@ -8,32 +8,7 @@ No issues found
 
 
 ===== T_14_3_01 =====
-Differences found between the objects!
-
-Summary of BASE and COMPARE
-  ====================================
-    PROPERTY      BASE        COMP    
-  ------------------------------------
-      Name        sas          r      
-     Class     data.frame  data.frame 
-    Rows(#)        12          19     
-   Columns(#)      5           5      
-  ------------------------------------
-
-
-There are rows in COMPARE that are not in BASE !!
-  =====
-   ROW 
-  -----
-   13  
-   14  
-   15  
-   16  
-   17  
-   18  
-   19  
-  -----
-
+No issues found
 
 
 ===== T_14_5_01 =====

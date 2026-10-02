@@ -274,6 +274,6 @@ The R results were first checked against the CSR: Table 14-3.01 (ANCOVA dose-res
 |---|---|---|
 | 14-1.01 Populations | 6 | Match |
 | 14-2.01 Demographics | 68 | Match |
-| 14-3.01 ADAS-Cog Week 24 | 19 | Match; SAS rerun pending after the WHERE= fix |
+| 14-3.01 ADAS-Cog Week 24 | 19 | Match |
 | 14-5.01 TEAE | 254 | Match (after Finding 1) |
 | Figure 14-1 statistics | 10 | Match (after Finding 3) |
