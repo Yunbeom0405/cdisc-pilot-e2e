@@ -1,0 +1,17 @@
+Table 14-1.01 Summary of Populations
+
+———————————————————————————————————————————————————————————————————————————————————————————
+                         Placebo    Xanomeline Low Dose   Xanomeline High Dose     Total   
+                         (N=86)           (N=84)                 (N=84)           (N=254)  
+———————————————————————————————————————————————————————————————————————————————————————————
+Intent-To-Treat (ITT)   86 (100%)        84 (100%)             84 (100%)         254 (100%)
+Safety                  86 (100%)        84 (100%)             84 (100%)         254 (100%)
+Efficacy                79 (92%)         81 (96%)               74 (88%)         234 (92%) 
+Completed Week 24       60 (70%)         28 (33%)               30 (36%)         118 (46%) 
+Completed Treatment     58 (67%)         25 (30%)               27 (32%)         110 (43%) 
+Completed Study         63 (73%)         46 (55%)               38 (45%)         147 (58%) 
+———————————————————————————————————————————————————————————————————————————————————————————
+
+Population: Intent-to-Treat. Percentages use N in the column header.
+Completed Treatment: EOTSTT = COMPLETED. Completed Study: EOSSTT = COMPLETED.
+Source: r/tlf/t_14_1_01.R
