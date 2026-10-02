@@ -39,8 +39,11 @@ footnote;
 
 /* statistics for QC: N, events, censored, median (95% CI), KM estimates */
 data stats;
-  length label $60 val $40;
-  set cs(where=(col ne .) in=a) q(where=(percent = 50) in=b) pl(in=c);
+  length label $200 val $40;
+  set cs(in=a) q(where=(percent = 50) in=b) pl(in=c);
+  /* column from the stratum number; the formatted COL would name the columns Placebo etc. */
+  if missing(stratum) then delete;
+  column = stratum;
   if a then do;
     ord = 1; label = 'N'; val = cats(total); output;
     ord = 2; label = 'Events'; val = cats(failed); output;
@@ -56,16 +59,16 @@ data stats;
     ord = 4 + timelist / 30; label = catx(' ', 'Event-free at Day', timelist); val = %f(survival, 3);
     output;
   end;
-  keep col ord label val;
+  keep column ord label val;
 run;
 
 proc sort data=stats;
-  by ord label col;
+  by ord label column;
 run;
 
 proc transpose data=stats out=f_14_1_stats(drop=_name_) prefix=c;
   by ord label;
-  id col;
+  id column;
   var val;
 run;
 

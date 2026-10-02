@@ -1,0 +1,49 @@
+
+===== T_14_1_01 =====
+No issues found
+
+
+===== T_14_2_01 =====
+No issues found
+
+
+===== T_14_3_01 =====
+No issues found
+
+
+===== T_14_5_01 =====
+Differences found between the objects!
+
+Summary of BASE and COMPARE
+  ====================================
+    PROPERTY      BASE        COMP    
+  ------------------------------------
+      Name        sas          r      
+     Class     data.frame  data.frame 
+    Rows(#)       254         254     
+   Columns(#)      7           7      
+  ------------------------------------
+
+
+Not all Values Compared Equal
+  =============================
+   Variable  No of Differences 
+  -----------------------------
+    LABEL            8         
+  -----------------------------
+
+
+  =========================================================================================
+   VARIABLE  ROW                 BASE                                COMPARE               
+  -----------------------------------------------------------------------------------------
+    LABEL    109  "INJURY, POISONING AND PROCEDUR..."  "INJURY, POISONING AND PROCEDUR..." 
+    LABEL    122  "ELECTROCARDIOGRAM T WAVE AMPLI..."  "ELECTROCARDIOGRAM T WAVE AMPLI..." 
+    LABEL    142  "MUSCULOSKELETAL AND CONNECTIVE..."  "MUSCULOSKELETAL AND CONNECTIVE..." 
+    LABEL    152  "NEOPLASMS BENIGN, MALIGNANT AN..."  "NEOPLASMS BENIGN, MALIGNANT AN..." 
+    LABEL    175  "PARTIAL SEIZURES WITH SECONDAR..."  "PARTIAL SEIZURES WITH SECONDAR..." 
+    LABEL    206  "RESPIRATORY, THORACIC AND MEDI..."  "RESPIRATORY, THORACIC AND MEDI..." 
+    LABEL    23   "CONGENITAL, FAMILIAL AND GENET..."  "CONGENITAL, FAMILIAL AND GENET..." 
+    LABEL    53   "GENERAL DISORDERS AND ADMINIST..."  "GENERAL DISORDERS AND ADMINIST..." 
+  -----------------------------------------------------------------------------------------
+
+

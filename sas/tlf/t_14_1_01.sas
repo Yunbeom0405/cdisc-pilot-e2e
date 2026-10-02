@@ -28,7 +28,7 @@ run;
 
 data t_14_1_01;
   set cnt2;
-  length label c1-c4 $40;
+  length label $200 c1-c4 $40;
   array n{4} n1-n4;
   array c{4} c1-c4;
   array bign{4} _temporary_ (&n1 &n2 &n3 &n4);

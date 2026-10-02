@@ -36,7 +36,7 @@ run;
 
 data desc;
   set _s;
-  length label $60 val $40;
+  length label $200 val $40;
   ord = 1; label = 'n'; val = cats(n); output;
   ord = 2; label = 'Mean (SD)'; val = cat(%f(mean, 1), ' (', %f(sd, 2), ')'); output;
   ord = 3; label = 'Median (Range)'; val = cat(%f(med, 1), ' (', %f(min, 1), ';', %f(max, 1), ')'); output;
@@ -44,7 +44,7 @@ data desc;
 run;
 
 data heads;
-  length label $60 val $40;
+  length label $200 val $40;
   col = 1;
   val = '';
   ord = 0;
@@ -80,7 +80,7 @@ run;
 quit;
 
 data infer;
-  length label $60 val $40;
+  length label $200 val $40;
   sec = 4;
   if _n_ = 1 then do;
     set dose(where=(upcase(strip(parameter)) = 'TRTPN') keep=parameter probt rename=(probt=p_dose));

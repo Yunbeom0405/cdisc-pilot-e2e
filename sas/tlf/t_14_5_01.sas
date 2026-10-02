@@ -63,7 +63,7 @@ run;
 
 data rows;
   set rows;
-  length label c1-c5 $40;
+  length label $200 c1-c5 $40;
   array n_{3};
   array ev_{3};
   array c{5} c1-c5;

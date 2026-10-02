@@ -219,3 +219,39 @@ The one TEAE event less in the low dose group is the duplicate AE row planted in
 | ADTTE | 508 | Match |
 | ADQSADAS | 9943 | Match (after Finding 1 fix) |
 | ADQSCIBC | 726 | Match |
+
+---
+
+## 1-11 TLF: SAS vs R cell-by-cell comparison
+
+| | |
+|---|---|
+| Date | 2026-10-02 |
+| Production | `sas/tlf/*.sas` -> RTF + displayed cells as CSV in `output/tlf/sas/` |
+| Independent | `r/tlf/*.R` ({rtables}, emmeans, survival) -> text, PNG + CSV in `output/tlf/r/` |
+| Method | `r/tlf/compare.R` - {diffdf} on the displayed text of every cell, report in `output/validation/tlf-r-vs-sas.txt` |
+
+The R results were first checked against the CSR: Table 14-3.01 (ANCOVA dose-response p = 0.245, LS mean differences, 95% CIs) and the Fisher p-values of Table 14-5.01 are the same as published.
+
+### First run
+
+| Display | Result |
+|---|---|
+| 14-1.01 Populations | Match |
+| 14-2.01 Demographics | Match |
+| 14-3.01 ADAS-Cog Week 24 | Match, including ANCOVA p-values and LS means |
+| 14-5.01 TEAE | All counts and p-values match; 8 labels differ |
+| Figure 14-1 statistics | SAS program stopped with an error |
+
+### Finding 1 - truncated SOC and PT names (Bug in SAS)
+
+- **What:** 8 SOC and PT names were cut at 40 characters in the SAS table, e.g. `INJURY, POISONING AND PROCEDURAL COMPLIC`.
+- **Why:** The row label was declared `length label $40`. The longest SOC in ADAE has 67 characters. SAS truncates without a message; R strings have no fixed length.
+- **Fix:** Row labels are `$200` in all TLF programs.
+- **Lesson:** Check the longest value before choosing a length; a silent truncation only shows up when someone reads the text.
+
+### Finding 2 - formatted strata as column names (Bug in SAS)
+
+- **What:** `f_14_1.sas` stopped: `Variable c1 is not on file`.
+- **Why:** The ODS output tables of PROC LIFETEST keep the format on the strata variable, so PROC TRANSPOSE named the columns from the formatted values (Placebo ...) instead of 1-3. The overall row of CensoredSummary has no stratum and gave the "missing ID values" warning.
+- **Fix:** The column number is taken from `STRATUM`, and the overall row is removed.

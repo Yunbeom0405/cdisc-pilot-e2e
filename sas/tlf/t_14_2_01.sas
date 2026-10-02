@@ -20,7 +20,7 @@ quit;
 /* section header row */
 %macro head(sec, title);
   data _l;
-    length label $60 val $40;
+    length label $200 val $40;
     sec = &sec;
     ord = 0;
     label = "&title";
@@ -43,7 +43,7 @@ quit;
 
   data _l;
     set _s;
-    length label $60 val $40;
+    length label $200 val $40;
     sec = &sec;
     ord = 1; label = 'n'; val = cats(n); output;
     ord = 2; label = 'Mean'; val = %f(mean, 1); output;
@@ -77,7 +77,7 @@ quit;
       h.definedata('n');
       h.definedone();
     end;
-    length label $60 val $40 v $200;
+    length label $200 val $40 v $200;
     array bign{4} _temporary_ (&n1 &n2 &n3 &n4);
     sec = &sec;
     do ord = 11 to 10 + countw("&values", '#');
