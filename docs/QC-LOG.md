@@ -6,6 +6,50 @@ Cause categories:
 - **Language** - SAS and R behave differently for the same logic
 - **Interpretation** - the spec allowed more than one reading
 - **Bug** - one of the programs was wrong
+- **Process** - the code was right, the way it was run or compared was not
+
+---
+
+## Summary
+
+Every dataset and display is programmed twice: SAS (production) and R (independent QC). The R programs are written from the spec, not from the SAS code. Outputs are compared with {diffdf}: SDTM and ADaM by key, TLFs on the displayed text of every cell. Derived results are also checked against the published CSR.
+
+| Layer | Compared | Final result |
+|---|---|---|
+| SDTM | 12 domains | All match |
+| ADaM | 10 datasets | All match |
+| TLF | 5 displays (cell by cell) | All match; key results equal the CSR |
+
+### All findings
+
+| # | Step | Finding | Cause | Wrong program | Found by |
+|---|---|---|---|---|---|
+| 1 | 1-5 | EPOCH: blank string vs missing | Language | R | SAS vs R comparison |
+| 2 | 1-5 | DSSEQ order of same-day records | Interpretation | Spec | SAS vs R comparison |
+| 3 | 1-5b | Early termination visit flagged as telephone call | Bug | SAS | Code review while writing R |
+| 4 | 1-5b | Lookup not sorted before merge in a macro | Bug | SAS | SAS log (run error) |
+| 5 | 1-5b | Blank removed from VSTPTREF by `cats()` | Language | SAS | SAS vs R comparison |
+| 6 | 1-5b | Compared against an old output file | Process | - | SAS vs R comparison |
+| 7 | 1-8 | ACTARM for subjects who stopped during titration | Interpretation | Spec (both) | Check against the CSR |
+| 8 | 1-9 | STUDYID lost in a one-to-many merge | Bug | SAS | SAS vs R comparison |
+| 9 | 1-9 | Tie in the first dermatologic event | Language | R | {admiral} warning |
+| 10 | 1-11 | SOC and PT names truncated at 40 characters | Bug | SAS | SAS vs R comparison |
+| 11 | 1-11 | Formatted strata used as column names | Bug | SAS | SAS log (run error) |
+| 12 | 1-11 | Kaplan-Meier columns swapped (stratum order) | Bug | SAS | SAS vs R comparison |
+| 13 | 1-11 | WHERE= on a renamed variable dropped the ANCOVA rows | Bug | SAS | SAS vs R comparison |
+
+| Found by | Findings |
+|---|---|
+| SAS vs R comparison | 8 (1, 2, 5, 6, 8, 10, 12, 13) |
+| Check against the CSR | 1 (7) |
+| Logs, warnings, code review | 4 (3, 4, 9, 11) |
+
+### What the comparison shows
+
+- **Silent errors.** Findings 8, 10, 12 and 13 gave no error or warning in SAS. The output looked complete; only the second program showed that values were missing, cut or in the wrong column. Finding 12 would have reported the low-dose results under high dose.
+- **Shared errors.** Finding 7 was in the spec, so SAS and R agreed and were both wrong. Double programming cannot catch this; checking derived counts against an external source (the CSR safety N of 86 / 84 / 84) did.
+- **Language traps.** Findings 1, 5 and 9 come from how SAS and R treat blanks, string functions and ties. Each is now handled in a shared helper (`read_sdtm()`, `catx()`, fully ordered "first record" rules).
+- **Fixes need QC too.** Finding 13 was introduced while removing a log warning, and was caught by rerunning the comparison.
 
 ---
 
