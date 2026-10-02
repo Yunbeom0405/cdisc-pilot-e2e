@@ -6,7 +6,22 @@ source("r/sdtm/setup.R")
 
 dm <- read_sdtm("dm")
 
-visits <- read_raw("visits") |>
+raw_visits <- read_raw("visits")
+
+# unscheduled lab collections on a date without a visit page are unscheduled visits
+lab_visits <- read_raw("lab_results") |>
+  filter(REQ_VISIT == "UNSCH", STATUS == "FINAL") |>
+  transmute(
+    SUBJECT = paste0(substr(PATIENT_ID, 1, 3), "-", substr(PATIENT_ID, 4, nchar(PATIENT_ID))),
+    FOLDER = "UNS",
+    d = as.Date(substr(COLLECTION_DT, 1, 10))
+  ) |>
+  distinct() |>
+  anti_join(mutate(raw_visits, d = as.Date(iso(VISIT_DATE))), by = c("SUBJECT", "d")) |>
+  mutate(VISIT_DATE = paste(format(d, "%d"), toupper(month.abb[as.integer(format(d, "%m"))]), format(d, "%Y"))) |>
+  select(SUBJECT, FOLDER, VISIT_DATE)
+
+visits <- bind_rows(raw_visits, lab_visits) |>
   mutate(
     USUBJID = paste0("01-", SUBJECT),
     dt = as.Date(iso(VISIT_DATE)),

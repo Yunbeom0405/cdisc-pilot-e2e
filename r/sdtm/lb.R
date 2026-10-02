@@ -81,7 +81,13 @@ lb <- lb |>
     LBORNRHI = REF_HIGH,
     LBSTRESC = RESULT_SI,
     LBSTRESN = suppressWarnings(as.numeric(RESULT_SI)),   # '<0.2' and text results stay null
-    LBSTRESU = UNITS_SI,
+    LBSTRESU = case_when(
+      LBTESTCD == "HBA1CHGB" ~ UNITS_SI,   # hemoglobin fraction, not a volume ratio
+      UNITS_SI == "GI/L" ~ "10^9/L",
+      UNITS_SI == "TI/L" ~ "10^12/L",
+      UNITS_SI == "1" ~ "L/L",
+      TRUE ~ UNITS_SI
+    ),
     LBSTNRLO = as.numeric(REF_LOW_SI),
     LBSTNRHI = as.numeric(REF_HIGH_SI),
     LBNRIND = unname(nrind[ABN_FLAG]),

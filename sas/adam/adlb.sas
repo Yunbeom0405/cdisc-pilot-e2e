@@ -13,7 +13,7 @@ data lb2;
   set lb1(rename=(trt01p=trtp trt01pn=trtpn trt01a=trta trt01an=trtan));
   length paramcd param parcat1 avisit ablfl anrind avalcat1 ontrtfl $200;
   paramcd = lbtestcd;
-  if lbstresu in ('', '1') then param = lbtest;
+  if missing(lbstresu) then param = lbtest;
   else param = strip(lbtest) || ' (' || strip(lbstresu) || ')';
   parcat1 = lbcat;
   aval = lbstresn;

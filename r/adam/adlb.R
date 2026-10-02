@@ -16,7 +16,7 @@ make_adlb <- function(cat, ds) {
     )) |>
     mutate(
       PARAMCD = LBTESTCD,
-      PARAM = if_else(is.na(LBSTRESU) | LBSTRESU == "1", LBTEST, paste0(LBTEST, " (", LBSTRESU, ")")),
+      PARAM = if_else(is.na(LBSTRESU), LBTEST, paste0(LBTEST, " (", LBSTRESU, ")")),
       PARCAT1 = LBCAT,
       AVAL = LBSTRESN,
       A1LO = LBSTNRLO,

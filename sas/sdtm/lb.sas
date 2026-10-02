@@ -165,6 +165,15 @@ proc format;
     other = .;
 run;
 
+/* SI units written as CT submission values */
+proc format;
+value $stresu
+'GI/L' = '10^9/L'
+'TI/L' = '10^12/L'
+'1' = 'L/L'
+other = _same_;
+run;
+
 data lb0;
   set raw_lab_results(where=(status = 'FINAL'));   /* cancelled results have a FINAL replacement */
   length usubjid lbtestcd lbtest lbcat lbnrind $200;
@@ -268,7 +277,8 @@ data lb2;
   lbornrhi = ref_high;
   lbstresc = result_si;
   lbstresn = input(result_si, ?? best.);   /* '<0.2' and text stay null */
-  lbstresu = units_si;
+  lbstresu = put(units_si, $stresu.);
+  if lbtestcd = 'HBA1CHGB' then lbstresu = units_si;   /* hemoglobin fraction, not a volume ratio */
   lbstnrlo = input(ref_low_si, best.);
   lbstnrhi = input(ref_high_si, best.);
   lbdtc = collection_dt;

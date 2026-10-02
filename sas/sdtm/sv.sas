@@ -3,8 +3,32 @@ Program : sv.sas
 Purpose : Create SDTM SV and the visit lookup (SDTM.SVMAP) used by VS, QS and LB
 *******************************************************************************/
 
+/* unscheduled lab collections on a date without a visit page are unscheduled visits */
+data labvis;
+  set raw_lab_results(keep=patient_id req_visit status collection_dt where=(req_visit = 'UNSCH' and status = 'FINAL'));
+  length subject folder visit_date $200;
+  subject = cats(substr(patient_id, 1, 3), '-', substr(patient_id, 4));
+  folder = 'UNS';
+  _d = input(substr(collection_dt, 1, 10), e8601da.);
+  _s = put(_d, date9.);
+  visit_date = catx(' ', substr(_s, 1, 2), substr(_s, 3, 3), substr(_s, 6));
+  keep subject folder visit_date _d;
+run;
+
+proc sort data=labvis nodupkey;
+  by subject _d;
+run;
+
+proc sql;
+  create table labvis2 as
+  select l.subject, l.folder, l.visit_date
+  from labvis as l
+  where not exists (select 1 from raw_visits as v
+    where v.subject = l.subject and input(compress(v.visit_date), date9.) = l._d);
+quit;
+
 data sv0;
-  set raw_visits;
+  set raw_visits labvis2;
   length usubjid $200;
   usubjid = cats('01-', subject);
   _dt = input(compress(visit_date), date9.);
