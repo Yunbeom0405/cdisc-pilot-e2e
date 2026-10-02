@@ -74,7 +74,7 @@ data adae1;
   %ady(aendt, aendy)
   if astdt ne . and aendt ne . then do;
     adurn = aendt - astdt + 1;
-    aduru = 'DAY';
+    aduru = 'DAYS';
   end;
 
   if trtsdt ne . and astdt >= trtsdt then trtemfl = 'Y';

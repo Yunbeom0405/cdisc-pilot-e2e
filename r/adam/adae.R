@@ -47,7 +47,7 @@ adae <- ae |>
     RELGR1 = if_else(AEREL %in% c("REMOTE", "NONE"), "NOT RELATED", "RELATED"),
     CQ01NAM = if_else(AEDECOD %in% derm, "DERMATOLOGIC EVENTS", NA_character_),
     ADURN = as.numeric(AENDT - ASTDT) + 1,
-    ADURU = if_else(!is.na(ADURN), "DAY", NA_character_),
+    ADURU = if_else(!is.na(ADURN), "DAYS", NA_character_),
     TRTEMFL = if_else(!is.na(TRTSDT) & ASTDT >= TRTSDT, "Y", NA_character_),
     DCTRTFL = if_else(paste(USUBJID, AESPID) %in% paste(dc_ae$USUBJID, dc_ae$AESPID), "Y", NA_character_)
   )
