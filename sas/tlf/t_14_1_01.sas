@@ -32,7 +32,7 @@ data t_14_1_01;
   array n{4} n1-n4;
   array c{4} c1-c4;
   array bign{4} _temporary_ (&n1 &n2 &n3 &n4);
-  row = input(compress(stat, 'r'), best.);
+  row = input(compress(stat, , 'kd'), best.);
   indent = 0;
   label = choosec(row, 'Intent-To-Treat (ITT)', 'Safety', 'Efficacy', 'Completed Week 24',
     'Completed Treatment', 'Completed Study');
