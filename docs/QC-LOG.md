@@ -12,13 +12,13 @@ Cause categories:
 
 ## Summary
 
-Every dataset and display is programmed twice: SAS (production) and R (independent QC). The R programs are written from the spec, not from the SAS code. Outputs are compared with {diffdf}: SDTM and ADaM by key, TLFs on the displayed text of every cell. Derived results are also checked against the published CSR.
+SAS is the production program, R the independent QC program written from the spec. Outputs are compared with {diffdf} (SDTM/ADaM by key, TLFs cell by cell). Key results are also checked against the CSR.
 
-| Layer | Compared | Final result |
+| Layer | Compared | Result |
 |---|---|---|
-| SDTM | 12 domains | All match |
-| ADaM | 10 datasets | All match |
-| TLF | 5 displays (cell by cell) | All match; key results equal the CSR |
+| SDTM | 12 domains | Match |
+| ADaM | 10 datasets | Match |
+| TLF | 5 displays | Match, key results equal the CSR |
 
 ### All findings
 
@@ -44,12 +44,7 @@ Every dataset and display is programmed twice: SAS (production) and R (independe
 | Check against the CSR | 1 (7) |
 | Logs, warnings, code review | 4 (3, 4, 9, 11) |
 
-### What the comparison shows
-
-- **Silent errors.** Findings 8, 10, 12 and 13 gave no error or warning in SAS. The output looked complete; only the second program showed that values were missing, cut or in the wrong column. Finding 12 would have reported the low-dose results under high dose.
-- **Shared errors.** Finding 7 was in the spec, so SAS and R agreed and were both wrong. Double programming cannot catch this; checking derived counts against an external source (the CSR safety N of 86 / 84 / 84) did.
-- **Language traps.** Findings 1, 5 and 9 come from how SAS and R treat blanks, string functions and ties. Each is now handled in a shared helper (`read_sdtm()`, `catx()`, fully ordered "first record" rules).
-- **Fixes need QC too.** Finding 13 was introduced while removing a log warning, and was caught by rerunning the comparison.
+Four SAS bugs (8, 10, 12, 13) gave no error or warning and were only visible in the comparison. Finding 7 was in the spec, so both programs agreed; only the CSR check found it.
 
 ---
 
