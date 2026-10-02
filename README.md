@@ -44,6 +44,12 @@ Target standards: SDTMIG v3.4, ADaM-IG 1.3, Define-XML v2.1. The aCRF follows SD
 - Comparison reports: [output/validation/](output/validation/). TLF output: [output/tlf/](output/tlf/).
 - Planned TLFs not yet built: [docs/TLF-PLAN.md](docs/TLF-PLAN.md).
 
+| Kaplan-Meier: time to first dermatologic event | eDISH: peak ALT vs peak bilirubin |
+|---|---|
+| <img src="output/tlf/r/f_14_1.png" width="450"> | <img src="output/tlf/r/f_a8.png" width="450"> |
+
+Figures from the R QC programs; the SAS versions are in `output/tlf/sas/`.
+
 ## Repository structure
 
 ```
