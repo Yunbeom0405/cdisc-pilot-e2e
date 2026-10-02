@@ -265,7 +265,7 @@ The R results were first checked against the CSR: Table 14-3.01 (ANCOVA dose-res
 
 ### Log clean-up
 
-- Table 14-3.01: `Multiple lengths were specified for the variable PARAMETER` - the dose-response and the contrast tables both have PARAMETER; it is renamed in one of them.
+- Table 14-3.01: `Multiple lengths were specified for the variable PARAMETER` - the dose-response and the contrast tables both have PARAMETER; it is renamed in one of them. The first attempt kept the old name in WHERE=, which SAS applies after RENAME=; the step failed and the inference rows disappeared. Caught by the comparison (12 rows in SAS vs 19 in R).
 - Figure 14-1: `Missing values were generated` - `%f` computed ROUND on a missing confidence limit before IFC picked the blank; the value is now replaced by 0 before rounding.
 
 ### Result
@@ -274,6 +274,6 @@ The R results were first checked against the CSR: Table 14-3.01 (ANCOVA dose-res
 |---|---|---|
 | 14-1.01 Populations | 6 | Match |
 | 14-2.01 Demographics | 68 | Match |
-| 14-3.01 ADAS-Cog Week 24 | 19 | Match |
+| 14-3.01 ADAS-Cog Week 24 | 19 | Match; SAS rerun pending after the WHERE= fix |
 | 14-5.01 TEAE | 254 | Match (after Finding 1) |
-| Figure 14-1 statistics | 10 | SAS rerun pending (Finding 3) |
+| Figure 14-1 statistics | 10 | Match (after Finding 3) |

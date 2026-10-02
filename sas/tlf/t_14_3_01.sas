@@ -83,7 +83,7 @@ data infer;
   length label $200 val $40;
   sec = 4;
   if _n_ = 1 then do;
-    set dose(where=(upcase(strip(parameter)) = 'TRTPN') keep=parameter probt rename=(parameter=_dp probt=p_dose));
+    set dose(keep=parameter probt rename=(parameter=_dp probt=p_dose) where=(upcase(strip(_dp)) = 'TRTPN'));
     ord = 1; label = 'p-value (Dose Response) [1][2]'; col = 2; val = %pv(p_dose); output;
   end;
   set est;
