@@ -3,7 +3,7 @@ Program : t_14_2_01.sas
 Purpose : Table 14-2.01 Summary of Demographic and Baseline Characteristics
 *******************************************************************************/
 
-%bign(ittfl = 'Y', trt01p)
+%bign(trt01p, where=%str(ittfl = 'Y'))
 
 data pop;
   set adam.adsl(where=(ittfl = 'Y'));
@@ -70,6 +70,7 @@ quit;
   quit;
 
   data _l;
+    if 0 then set _c;
     if _n_ = 1 then do;
       declare hash h(dataset: '_c');
       h.definekey('col', 'v');

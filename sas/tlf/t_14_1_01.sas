@@ -3,7 +3,7 @@ Program : t_14_1_01.sas
 Purpose : Table 14-1.01 Summary of Populations
 *******************************************************************************/
 
-%bign(ittfl = 'Y', trt01p)
+%bign(trt01p, where=%str(ittfl = 'Y'))
 
 data pop;
   set adam.adsl(where=(ittfl = 'Y'));

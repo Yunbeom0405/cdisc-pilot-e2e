@@ -53,7 +53,7 @@ data stats;
     output;
   end;
   else do;
-    ord = 4 + timelist / 30; label = cat('Event-free at Day ', timelist); val = %f(survival, 3);
+    ord = 4 + timelist / 30; label = catx(' ', 'Event-free at Day', timelist); val = %f(survival, 3);
     output;
   end;
   keep col ord label val;
@@ -75,7 +75,7 @@ data f_14_1_stats;
   indent = 0;
 run;
 
-%bign(saffl = 'Y', trt01a)
+%bign(trt01a, where=%str(saffl = 'Y'))
 
 %report(f_14_1_stats, f_14_1_stats, Figure 14-1 Statistics: Time to First Dermatologic Event,
   cols=c1 c2 c3,

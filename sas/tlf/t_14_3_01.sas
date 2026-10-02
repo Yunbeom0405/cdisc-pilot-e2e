@@ -3,7 +3,7 @@ Program : t_14_3_01.sas
 Purpose : Table 14-3.01 ADAS-Cog (11) Change from Baseline to Week 24 - LOCF
 *******************************************************************************/
 
-%bign(efffl = 'Y', trt01p)
+%bign(trt01p, where=%str(efffl = 'Y'))
 
 data eff;
   set adam.adqsadas(where=(paramcd = 'ACTOT' and anl01fl = 'Y' and efffl = 'Y' and avisitn in (0, 24)));
@@ -59,31 +59,31 @@ data w24;
   set eff(where=(avisitn = 24));
 run;
 
-ods exclude all;
-proc glm data=w24;
+proc glm data=w24 plots=none;
   class sitegr1;
   model chg = trtpn sitegr1 base / solution;
+  ods select ParameterEstimates;
   ods output ParameterEstimates=dose;
 run;
 quit;
 
 /* class order of TRTP: Placebo, Xanomeline High Dose, Xanomeline Low Dose */
-proc glm data=w24;
+proc glm data=w24 plots=none;
   class trtp sitegr1;
   model chg = trtp sitegr1 base / clparm;
   estimate 'Low - Placebo' trtp -1 0 1;
   estimate 'High - Placebo' trtp -1 1 0;
   estimate 'High - Low' trtp 0 1 -1;
+  ods select Estimates;
   ods output Estimates=est;
 run;
 quit;
-ods exclude none;
 
 data infer;
   length label $60 val $40;
   sec = 4;
   if _n_ = 1 then do;
-    set dose(where=(parameter = 'TRTPN') keep=parameter probt rename=(probt=p_dose));
+    set dose(where=(upcase(strip(parameter)) = 'TRTPN') keep=parameter probt rename=(probt=p_dose));
     ord = 1; label = 'p-value (Dose Response) [1][2]'; col = 2; val = %pv(p_dose); output;
   end;
   set est;

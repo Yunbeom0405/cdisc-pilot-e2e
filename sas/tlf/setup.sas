@@ -34,8 +34,9 @@ run;
   ifc(&n = 0, '0', cats(&n) || ' (' || %f(&n / &den * 100, &d) || '%)')
 %mend npct;
 
-/* column N from ADSL, one macro variable per column: &n1 - &n4 */
-%macro bign(where, trt);
+/* column N from ADSL, global macro variables &n1 - &n4 */
+%macro bign(trt, where=);
+  %global n1 n2 n3 n4;
   proc sql noprint;
     select count(*) into :n1 trimmed from adam.adsl where &where and &trt = 'Placebo';
     select count(*) into :n2 trimmed from adam.adsl where &where and &trt = 'Xanomeline Low Dose';

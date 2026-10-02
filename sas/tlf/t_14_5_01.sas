@@ -3,7 +3,7 @@ Program : t_14_5_01.sas
 Purpose : Table 14-5.01 Incidence of Treatment Emergent Adverse Events by Treatment Group
 *******************************************************************************/
 
-%bign(saffl = 'Y', trt01a)
+%bign(trt01a, where=%str(saffl = 'Y'))
 
 data te;
   set adam.adae(where=(trtemfl = 'Y' and saffl = 'Y'));
