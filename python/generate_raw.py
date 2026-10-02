@@ -316,7 +316,7 @@ lab = pd.DataFrame({
     "RESULT": lb.LBORRES, "UNITS": lb.LBORRESU.replace("NO UNITS", ""),
     "REF_LOW": lb.LBORNRLO, "REF_HIGH": lb.LBORNRHI, "ABN_FLAG": lb.LBNRIND.map(FLAG),
     "RESULT_SI": lb.LBSTRESC, "UNITS_SI": lb.LBSTRESU.replace("NO UNITS", ""),
-    "REF_LOW_SI": lb.LBSTNRLO.map(lambda x: "" if x == "" else f"{x:g}"),
+    "REF_LOW_SI": lb.LBSTNRLO.map(lambda x: "" if x == "" else "0" if abs(x) < 1e-9 else f"{x:g}"),  # Pilot stores 0 as 5.4e-79
     "REF_HIGH_SI": lb.LBSTNRHI.map(lambda x: "" if x == "" else f"{x:g}"),
     "STATUS": "FINAL",
 })

@@ -1,6 +1,7 @@
 /*******************************************************************************
 Program : adlb.sas
 Purpose : Create ADaM ADLBC (chemistry) and ADLBH (hematology)
+          Split by LBCAT as in the CDISC Pilot; a single ADLB is also valid per ADaM IG
 *******************************************************************************/
 
 %macro adlb(cat, out, label);

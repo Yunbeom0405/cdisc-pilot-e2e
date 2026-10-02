@@ -171,7 +171,7 @@ value $stresu
 'GI/L' = '10^9/L'
 'TI/L' = '10^12/L'
 '1' = 'L/L'
-other = _same_;
+other = [$20.];
 run;
 
 data lb0;
