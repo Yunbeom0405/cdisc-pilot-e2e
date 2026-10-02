@@ -255,3 +255,25 @@ The R results were first checked against the CSR: Table 14-3.01 (ANCOVA dose-res
 - **What:** `f_14_1.sas` stopped: `Variable c1 is not on file`.
 - **Why:** The ODS output tables of PROC LIFETEST keep the format on the strata variable, so PROC TRANSPOSE named the columns from the formatted values (Placebo ...) instead of 1-3. The overall row of CensoredSummary has no stratum and gave the "missing ID values" warning.
 - **Fix:** The column number is taken from `STRATUM`, and the overall row is removed.
+
+### Finding 3 - Kaplan-Meier columns swapped (Bug in SAS)
+
+- **What:** After Finding 2 was fixed, the Low Dose and High Dose columns of the Figure 14-1 statistics were swapped in SAS (events 61 / 62 instead of 62 / 61).
+- **Why:** PROC LIFETEST numbers STRATUM in the sorted order of the formatted values: Placebo, Xanomeline High Dose, Xanomeline Low Dose. STRATUM 2 is High Dose, not Low Dose.
+- **Fix:** The column is taken from the treatment name (`VVALUE(col)`), not from STRATUM.
+- **Lesson:** A stratum or class number is an order, not an identity. Map columns by name.
+
+### Log clean-up
+
+- Table 14-3.01: `Multiple lengths were specified for the variable PARAMETER` - the dose-response and the contrast tables both have PARAMETER; it is renamed in one of them.
+- Figure 14-1: `Missing values were generated` - `%f` computed ROUND on a missing confidence limit before IFC picked the blank; the value is now replaced by 0 before rounding.
+
+### Result
+
+| Display | Rows | Result |
+|---|---|---|
+| 14-1.01 Populations | 6 | Match |
+| 14-2.01 Demographics | 68 | Match |
+| 14-3.01 ADAS-Cog Week 24 | 19 | Match |
+| 14-5.01 TEAE | 254 | Match (after Finding 1) |
+| Figure 14-1 statistics | 10 | SAS rerun pending (Finding 3) |

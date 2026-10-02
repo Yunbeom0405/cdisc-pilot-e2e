@@ -26,7 +26,7 @@ run;
 
 /* fixed decimals, half away from zero */
 %macro f(x, d);
-  ifc(missing(&x), '', strip(put(round(&x, 10 ** -&d), 32.&d)))
+  ifc(missing(&x), '', strip(put(round(coalesce(&x, 0), 10 ** -&d), 32.&d)))
 %mend f;
 
 /* n (pct%) with pct to &d decimals; plain 0 when n = 0 */

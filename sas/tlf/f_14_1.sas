@@ -41,9 +41,9 @@ footnote;
 data stats;
   length label $200 val $40;
   set cs(in=a) q(where=(percent = 50) in=b) pl(in=c);
-  /* column from the stratum number; the formatted COL would name the columns Placebo etc. */
+  /* STRATUM follows the sorted formatted values, so take the column from the treatment name */
   if missing(stratum) then delete;
-  column = stratum;
+  column = whichc(strip(vvalue(col)), 'Placebo', 'Xanomeline Low Dose', 'Xanomeline High Dose');
   if a then do;
     ord = 1; label = 'N'; val = cats(total); output;
     ord = 2; label = 'Events'; val = cats(failed); output;
@@ -51,8 +51,8 @@ data stats;
   end;
   else if b then do;
     ord = 4; label = 'Median (95% CI)';
-    val = cat(%f(estimate, 1), ' (', coalescec(%f(lowerlimit, 1), 'NE'), ';', coalescec(%f(upperlimit, 1), 'NE'), ')');
     if estimate = . then val = 'NE';
+    else val = cat(%f(estimate, 1), ' (', coalescec(%f(lowerlimit, 1), 'NE'), ';', coalescec(%f(upperlimit, 1), 'NE'), ')');
     output;
   end;
   else do;

@@ -1,0 +1,11 @@
+LABEL,C1,C2,C3,ROW
+N,86,84,84,1
+Events,29,61,62,2
+Censored,57,23,22,3
+Median (95% CI),NE,37.0 (24.0;46.0),34.0 (27.0;51.0),4
+Event-free at Day 30,0.846,0.535,0.547,5
+Event-free at Day 60,0.771,0.262,0.348,6
+Event-free at Day 90,0.678,0.172,0.288,7
+Event-free at Day 120,0.652,0.134,0.212,8
+Event-free at Day 150,0.652,0.134,0.196,9
+Event-free at Day 180,0.635,0.134,0.196,10
